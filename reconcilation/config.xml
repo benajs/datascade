@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?><project>
+  <actions/>
+  <description/>
+  <displayName>Reconcilation</displayName>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>10</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <com.datascade.auth.JobAuthProperty plugin="datascade-jenkins-plugin@1.0-SNAPSHOT">
+      <ownerId>admin</ownerId>
+    </com.datascade.auth.JobAuthProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <com.datascade.DataBuilder plugin="datascade-jenkins-plugin@1.0-SNAPSHOT">
+      <config>{
+    "sheets": [
+        {
+            "name": "Base",
+            "source": {
+                "id": "file",
+                "location": "data",
+                "path": "IBBoost/base.csv",
+                "wildcards": "NEWEST",
+                "separator": ",",
+                "typeDetect": false
+            },
+            "view": {
+                "id": "table"
+            }
+        },
+        {
+            "name": "Target",
+            "source": {
+                "id": "file",
+                "location": "data",
+                "path": "IBBoost/target.csv",
+                "wildcards": "NEWEST",
+                "separator": ",",
+                "typeDetect": false
+            },
+            "view": {
+                "id": "table"
+            }
+        },
+        {
+            "name": "Reconcile",
+            "source": {
+                "id": "compare",
+                "left": "Base",
+                "right": "Target",
+                "maxMismatches": 3
+            },
+            "view": {
+                "id": "table"
+            },
+            "ops": [
+                {
+                    "id": "notes",
+                    "columns": [
+                        "Card Number (B)"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Summary",
+            "source": {
+                "id": "compare-summary",
+                "ref": "Reconcile"
+            },
+            "view": {
+                "id": "table"
+            },
+            "ops": [
+                {
+                    "id": "add",
+                    "name": "TYPE",
+                    "value": "= IF(OR(ISTEXT('MISMATCH COLUMN'), ISTEXT(NOTES)), \"\", RESULT)"
+                },
+                {
+                    "id": "add",
+                    "name": "COLUMN",
+                    "value": "= IF(ISTEXT(NOTES), \"\", 'MISMATCH COLUMN')"
+                },
+                {
+                    "id": "add",
+                    "name": "TOTAL",
+                    "value": "= IF(ISTEXT(NOTES), \"\", COUNT)"
+                },
+                {
+                    "id": "add",
+                    "name": "TOTAL NOTES",
+                    "value": "= IF(ISTEXT(NOTES), COUNT, \"\")"
+                },
+                {
+                    "id": "order",
+                    "columns": [
+                        "TYPE",
+                        "COLUMN",
+                        "TOTAL",
+                        "NOTES",
+                        "TOTAL NOTES"
+                    ]
+                },
+                {
+                    "id": "hide",
+                    "columns": [
+                        "RESULT",
+                        "MISMATCH COLUMN",
+                        "COUNT"
+                    ]
+                }
+            ]
+        }
+    ],
+    "outputs": [],
+    "archives": []
+}</config>
+    </com.datascade.DataBuilder>
+  </builders>
+  <publishers/>
+  <buildWrappers>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.20"/>
+  </buildWrappers>
+</project>
