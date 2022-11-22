@@ -1,0 +1,64 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <displayName>GroovyRead</displayName>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>10</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <com.datascade.auth.JobAuthProperty plugin="datascade-jenkins-plugin@1.0-SNAPSHOT">
+      <ownerId>admin</ownerId>
+    </com.datascade.auth.JobAuthProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <com.datascade.DataBuilder plugin="datascade-jenkins-plugin@1.0-SNAPSHOT">
+      <config>{
+    &quot;sheets&quot;: [
+        {
+            &quot;name&quot;: &quot;Sheet1&quot;,
+            &quot;source&quot;: {
+                &quot;id&quot;: &quot;groovy&quot;,
+                &quot;script&quot;: &quot;@Sheet(\&quot;Sheet2\&quot;)\r\n\r\ndef mySheet;\r\ndef results =[][]\r\n\r\nmySheet.each{ \r\ndef row =[]\r\nrow.add(it[\&quot;country_code\&quot;]+\&quot;_\&quot;+it[\&quot;code\&quot;])\r\nrow.add(it[\&quot;value\&quot;])\r\nresults.add(row)\r\n}\r\n\r\nreturn results&quot;
+            },
+            &quot;view&quot;: {
+                &quot;id&quot;: &quot;table&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Sheet2&quot;,
+            &quot;source&quot;: {
+                &quot;id&quot;: &quot;file&quot;,
+                &quot;location&quot;: &quot;data&quot;,
+                &quot;path&quot;: &quot;trademin.csv&quot;,
+                &quot;wildcards&quot;: &quot;NEWEST&quot;,
+                &quot;separator&quot;: &quot;,&quot;
+            },
+            &quot;view&quot;: {
+                &quot;id&quot;: &quot;table&quot;
+            }
+        }
+    ],
+    &quot;outputs&quot;: [],
+    &quot;archives&quot;: []
+}</config>
+    </com.datascade.DataBuilder>
+  </builders>
+  <publishers/>
+  <buildWrappers>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.20"/>
+  </buildWrappers>
+</project>
