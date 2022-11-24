@@ -37,6 +37,16 @@
             &quot;view&quot;: {
                 &quot;id&quot;: &quot;table&quot;
             }
+        }, 
+        {
+            &quot;name&quot;: &quot;Sheet3&quot;,
+            &quot;source&quot;: {
+                &quot;id&quot;: &quot;groovy&quot;,
+                &quot;script&quot;: &quot;@Sheet(\&quot;Sheet2\&quot;)\r\n\r\ndef mySheet;\r\ndef results =[][]\r\n\r\nmySheet.each{ \r\ndef row =[]\r\nrow.add(it[\&quot;country_code\&quot;]+\&quot;_\&quot;+it[\&quot;code\&quot;])\r\nrow.add(it[\&quot;value\&quot;])\r\nresults.add(row)\r\n}\r\n\r\nreturn results&quot;
+            },
+            &quot;view&quot;: {
+                &quot;id&quot;: &quot;table&quot;
+            }
         },
         {
             &quot;name&quot;: &quot;Sheet2&quot;,
