@@ -32,7 +32,7 @@
             &quot;name&quot;: &quot;Sheet1&quot;,
             &quot;source&quot;: {
                 &quot;id&quot;: &quot;groovy&quot;,
-                &quot;script&quot;: &quot;// Writing to result\r\n\r\ndef result = []\r\ndef header = []\r\nheader.add(\&quot;Name\&quot;)\r\nheader.add(\&quot;Age\&quot;)\r\nheader.add(\&quot;Score\&quot;)\r\nresult.add(header)\r\ndef row = []\r\nrow.add(\&quot;John\&quot;)\r\nrow.add(\&quot;35\&quot;)\r\nrow.add(\&quot;8\&quot;)\r\nresult.add(row)\r\nreturn result&quot;
+                &quot;script&quot;: &quot;// Writing to result\r\n\r\ndef result = []\r\ndef header = []\r\nheader.add(\&quot;Name\&quot;)\r\nheader.add(\&quot;Age\&quot;)\r\nheader.add(\&quot;Score\&quot;)\r\nresult.add(header)\r\ndef row = []\r\nrow.add(\&quot;Johaan\&quot;)\r\nrow.add(\&quot;35\&quot;)\r\nrow.add(\&quot;8\&quot;)\r\nresult.add(row)\r\nreturn result&quot;
             },
             &quot;view&quot;: {
                 &quot;id&quot;: &quot;table&quot;
