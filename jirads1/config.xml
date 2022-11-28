@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><project>
   <actions/>
   <description/>
-  <displayName>GroovyRead</displayName>
+  <displayName>jirads1</displayName>
   <keepDependencies>false</keepDependencies>
   <properties>
     <jenkins.model.BuildDiscarderProperty>
@@ -30,35 +30,27 @@
         {
             "name": "Sheet1",
             "source": {
-                "id": "groovy",
-                "script": "@Sheet(\"Sheet2\")\r\n\r\ndef mySheet;\r\ndef results =[][]\r\n\r\nmySheet.each{ \r\ndef row =[]\r\nrow.add(it[\"country_code\"]+\"  _\"+it[\"code\"])\r\nrow.add(it[\"value\"])\r\nresults.add(row)\r\n}\r\n\r\nreturn results"
+                "id": "http",
+                "url": "https://jbrains.atlassian.net/rest/api/latest/issue/DS-1",
+                "auth": "jira-user-token"
             },
             "view": {
                 "id": "table"
-            }
-        },
-        {
-            "name": "Sheet3",
-            "source": {
-                "id": "groovy",
-                "script": "@Sheet(\"Sheet2\")\r\n\r\ndef mySheet;\r\ndef results =[][]\r\n\r\nmySheet.each{ \r\ndef row =[]\r\nrow.add(it[\"country_code\"]+\"ben_\"+it[\"code\"])\r\nrow.add(it[\"value\"])\r\nrow.add(it[\"value\"])\r\nresults.add(row)\r\n}\r\n\r\nreturn results"
             },
-            "view": {
-                "id": "table"
-            }
-        },
-        {
-            "name": "Sheet2",
-            "source": {
-                "id": "file",
-                "location": "data",
-                "path": "trademin.csv",
-                "wildcards": "NEWEST",
-                "separator": ","
-            },
-            "view": {
-                "id": "table"
-            }
+            "ops": [
+                {
+                    "id": "convert",
+                    "columns": [
+                        "fields/status/name",
+                        "fields/status/statusCategory/name",
+                        "fields/summary",
+                        "fields/creator/emailAddress",
+                        "fields/subtasks",
+                        "fields/project/name",
+                        "fields/issuetype/name"
+                    ]
+                }
+            ]
         }
     ],
     "outputs": [],
@@ -68,6 +60,6 @@
   </builders>
   <publishers/>
   <buildWrappers>
-    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.20"/>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.21"/>
   </buildWrappers>
 </project>

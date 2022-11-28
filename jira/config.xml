@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><project>
   <actions/>
   <description/>
-  <displayName>GroovyRead</displayName>
+  <displayName>jira</displayName>
   <keepDependencies>false</keepDependencies>
   <properties>
     <jenkins.model.BuildDiscarderProperty>
@@ -30,35 +30,51 @@
         {
             "name": "Sheet1",
             "source": {
-                "id": "groovy",
-                "script": "@Sheet(\"Sheet2\")\r\n\r\ndef mySheet;\r\ndef results =[][]\r\n\r\nmySheet.each{ \r\ndef row =[]\r\nrow.add(it[\"country_code\"]+\"  _\"+it[\"code\"])\r\nrow.add(it[\"value\"])\r\nresults.add(row)\r\n}\r\n\r\nreturn results"
+                "id": "http",
+                "url": "https://jbrains.atlassian.net/rest/api/latest/search?expand=names,renderedFields",
+                "auth": "jira-user-token"
             },
             "view": {
                 "id": "table"
-            }
-        },
-        {
-            "name": "Sheet3",
-            "source": {
-                "id": "groovy",
-                "script": "@Sheet(\"Sheet2\")\r\n\r\ndef mySheet;\r\ndef results =[][]\r\n\r\nmySheet.each{ \r\ndef row =[]\r\nrow.add(it[\"country_code\"]+\"ben_\"+it[\"code\"])\r\nrow.add(it[\"value\"])\r\nrow.add(it[\"value\"])\r\nresults.add(row)\r\n}\r\n\r\nreturn results"
             },
-            "view": {
-                "id": "table"
-            }
+            "ops": [
+                {
+                    "id": "convert",
+                    "columns": [
+                        "issues/key",
+                        "issues/renderedFields/created",
+                        "issues/fields/parent/fields/status/name",
+                        "issues/fields/project/name",
+                        "issues/fields/parent/fields/summary",
+                        "issues/fields/summary",
+                        "issues/fields/issuetype/name",
+                        "issues/fields/status/name",
+                        "issues/fields/status/statusCategory/name"
+                    ]
+                }
+            ]
         },
         {
             "name": "Sheet2",
             "source": {
-                "id": "file",
-                "location": "data",
-                "path": "trademin.csv",
-                "wildcards": "NEWEST",
-                "separator": ","
+                "id": "sheet",
+                "ref": "Sheet1"
             },
             "view": {
-                "id": "table"
-            }
+                "id": "html"
+            },
+            "ops": [
+                {
+                    "columns": [
+                        "renderedFields created",
+                        "status name",
+                        "project name",
+                        "fields summary",
+                        "statusCategory name"
+                    ],
+                    "id": "hide"
+                }
+            ]
         }
     ],
     "outputs": [],
@@ -68,6 +84,6 @@
   </builders>
   <publishers/>
   <buildWrappers>
-    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.20"/>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.21"/>
   </buildWrappers>
 </project>

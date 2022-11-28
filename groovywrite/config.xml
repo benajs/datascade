@@ -1,7 +1,6 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.0" encoding="UTF-8"?><project>
   <actions/>
-  <description></description>
+  <description/>
   <displayName>GroovyWrite</displayName>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -27,20 +26,20 @@
   <builders>
     <com.datascade.DataBuilder plugin="datascade-jenkins-plugin@1.0-SNAPSHOT">
       <config>{
-    &quot;sheets&quot;: [
+    "sheets": [
         {
-            &quot;name&quot;: &quot;Sheet1&quot;,
-            &quot;source&quot;: {
-                &quot;id&quot;: &quot;groovy&quot;,
-                &quot;script&quot;: &quot;// Writing to result\r\n\r\ndef result = []\r\ndef header = []\r\nheader.add(\&quot;Name\&quot;)\r\nheader.add(\&quot;Age\&quot;)\r\nheader.add(\&quot;Score\&quot;)\r\nresult.add(header)\r\ndef row = []\r\nrow.add(\&quot;Johaan\&quot;)\r\nrow.add(\&quot;35\&quot;)\r\nrow.add(\&quot;8\&quot;)\r\nresult.add(row)\r\nreturn result&quot;
+            "name": "Sheet1",
+            "source": {
+                "id": "groovy",
+                "script": "// Writing to result\r\n\r\ndef result = []\r\ndef header = []\r\nheader.add(\"Name\")\r\nheader.add(\"Age\")\r\nheader.add(\"Score\")\r\nresult.add(header)\r\ndef row = []\r\nrow.add(\"Johaan\")\r\nrow.add(\"35\")\r\nrow.add(\"8\")\r\nresult.add(row)\r\nreturn result"
             },
-            &quot;view&quot;: {
-                &quot;id&quot;: &quot;table&quot;
+            "view": {
+                "id": "table"
             }
         }
     ],
-    &quot;outputs&quot;: [],
-    &quot;archives&quot;: []
+    "outputs": [],
+    "archives": []
 }</config>
     </com.datascade.DataBuilder>
   </builders>
