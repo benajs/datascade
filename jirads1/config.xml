@@ -32,7 +32,7 @@
             "source": {
                 "id": "http",
                 "url": "https://jbrains.atlassian.net/rest/api/latest/issue/DS-1",
-                "auth": "jira-user-token"
+                "auth": "jira"
             },
             "view": {
                 "id": "table"

@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?><project>
+  <actions/>
+  <description/>
+  <displayName>pdf</displayName>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>10</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <org.ibboost.orqa.jenkins.datatransform.auth.JobAuthProperty plugin="datatransform-jenkins-plugin@1.0-SNAPSHOT">
+      <ownerId>admin</ownerId>
+    </org.ibboost.orqa.jenkins.datatransform.auth.JobAuthProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <org.ibboost.orqa.jenkins.datatransform.DataBuilder plugin="datatransform-jenkins-plugin@1.0-SNAPSHOT">
+      <config>{
+    "sheets": [
+        {
+            "name": "logo",
+            "source": {
+                "id": "file",
+                "location": "data",
+                "path": "logoclient.png",
+                "wildcards": "NEWEST"
+            },
+            "view": {
+                "id": "table"
+            }
+        },
+        {
+            "name": "Input1",
+            "source": {
+                "id": "text",
+                "content": "Date,Invoive Number,Prepared By\n1/09/2022, 100001,Ben\n"
+            },
+            "view": {
+                "id": "table"
+            },
+            "ops": [
+                {
+                    "id": "convert",
+                    "type": "csv",
+                    "columns": []
+                }
+            ]
+        },
+        {
+            "name": "pdf",
+            "source": {
+                "id": "xslt",
+                "ref": "Input1",
+                "xslt": "&lt;xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"&gt;\r\n\t&lt;xsl:param name=\"Name\"/&gt;\r\n\t&lt;xsl:param name=\"input3\" select=\"document('Input3')\"/&gt;\r\n\t&lt;xsl:param name=\"input1\" select=\"document('Input1')\"/&gt;\r\n\t&lt;xsl:param name=\"input2\" select=\"document('Input2')\"/&gt;\r\n\t&lt;xsl:param name=\"input4\" select=\"document('Input4')\"/&gt;\r\n\t&lt;xsl:output method=\"fo:pdf\"/&gt;\r\n\t&lt;xsl:template match=\"/\"&gt;\r\n\t\t&lt;fo:root xmlns:fo=\"http://www.w3.org/1999/XSL/Format\"&gt;\r\n\t\t\t&lt;fo:layout-master-set&gt;\r\n\t\t\t\t&lt;fo:simple-page-master master-name=\"my_page\" margin=\"0.5in\"&gt;\r\n\t\t\t\t\t&lt;fo:region-body/&gt;\r\n\t\t\t\t&lt;/fo:simple-page-master&gt;\r\n\t\t\t&lt;/fo:layout-master-set&gt;\r\n\t\t\t&lt;fo:page-sequence master-reference=\"my_page\"&gt;\r\n\t\t\t\t&lt;fo:flow flow-name=\"xsl-region-body\"&gt;\r\n\t\t\t\t\t&lt;fo:block border-style=\"solid\" border-width=\"1mm\" text-align=\"center\" font-size=\"10pt\" margin=\"1mm\"&gt;\r\n\t\t\t\t\t\t&lt;xsl:value-of select=\"concat(' ', $Name)\"/&gt;\r\n\t\t\t\t\t\t&lt;fo:block text-align=\"center\"&gt;\r\n\t\t\t\t\t\t\t&lt;fo:external-graphic src=\"Logo\"/&gt;\r\n\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t&lt;xsl:text&gt;311 S. Wacker Drive, Suite 980,&lt;/xsl:text&gt;\r\n\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t&lt;xsl:text&gt;Chicago IL 60606&lt;/xsl:text&gt;\r\n\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t&lt;fo:block padding-top=\"5mm\"/&gt;\r\n\t\t\t\t\t\t&lt;fo:block text-align=\"left\" margin-bottom=\"1in\"&gt;\r\n\t\t\t\t\t\t\t&lt;xsl:text&gt;\r\n\t\t\t\t\t\t\t\t&lt;fo:inline text-decoration=\"underline\"&gt;\r\n\t\t\t\t\t\t\t     \tInput 1\r\n\t\t\t\t\t\t\t\t&lt;/fo:inline&gt;\r\n\t\t\t\t\t\t\t&lt;/xsl:text&gt;\r\n\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t&lt;fo:block padding-top=\"5mm\"/&gt;\r\n\t\t\t\t\t\t\t\t\t&lt;fo:table table-layout=\"fixed\" width=\"50%\"&gt;\r\n\t\t\t\t\t\t\t\t\t\t&lt;fo:table-body&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:for-each select=\"$input1/table/row\"&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:for-each select=\"./*\"&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:table-row&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:value-of select=\"name()\"/&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:value-of select=\".\"/&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-row&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t&lt;/xsl:for-each&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t&lt;/xsl:for-each&gt;\r\n\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-body&gt;\r\n\t\t\t\t\t\t\t\t\t&lt;/fo:table&gt;\r\n\t\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t\t&lt;fo:block padding-top=\"5mm\"/&gt;\r\n\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t&lt;xsl:text&gt;\r\n\t\t\t\t\t\t\t\t&lt;fo:inline text-decoration=\"underline\"&gt;\r\n\t\t\t\t\t\t\t\tInput 1\r\n\t\t\t\t\t\t\t\t&lt;/fo:inline&gt;\r\n\t\t\t\t\t\t\t&lt;/xsl:text&gt;\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:block padding-top=\"5mm\"/&gt;\r\n\r\n\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t&lt;fo:table inline-progression-dimension=\"auto\" table-layout=\"auto\" width=\"100%\" hyphenate=\"true\"&gt;\r\n\t\t\t\t\t\t\t\t\t\t&lt;fo:table-body&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t&lt;fo:table-row text-align=\"left\" font-weight=\"bold\"&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:for-each select=\"$input2/table/row[1]/*\"&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:value-of select=\"local-name()\"/&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t&lt;/xsl:for-each&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-row&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t&lt;fo:table-row&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:block padding-top=\"5mm\"/&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-row&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:for-each select=\"$input2/table/row\"&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:table-row&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:for-each select=\"./*\"&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:value-of select=\".\"/&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/xsl:for-each&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-row&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t&lt;/xsl:for-each&gt;\r\n\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-body&gt;\r\n\t\t\t\t\t\t\t\t\t&lt;/fo:table&gt;\r\n\t\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:block padding-top=\"10mm\"/&gt;\r\n\r\n\t\t\t\t\t\t\t&lt;fo:block border-style=\"solid\" border-width=\"0.4mm\"/&gt;\r\n\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t&lt;fo:table table-layout=\"fixed\" width=\"100%\" hyphenate=\"true\"&gt;\r\n\t\t\t\t\t\t\t\t\t\t&lt;fo:table-body&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:for-each select=\"$input4/table/row\"&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:table-row&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:for-each select=\"./*\"&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:value-of select=\".\"/&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/xsl:for-each&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-row&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t&lt;/xsl:for-each&gt;\r\n\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-body&gt;\r\n\t\t\t\t\t\t\t\t\t&lt;/fo:table&gt;\r\n\t\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t\t\t&lt;fo:block padding-top=\"5mm\"/&gt;\r\n\t\t\t\t\t\t\t\t&lt;xsl:text&gt;Input3&lt;/xsl:text&gt;\r\n\t\t\t\t\t\t\t\t&lt;fo:block padding-top=\"5mm\"/&gt;\r\n\t\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t&lt;fo:table width=\"5in\"&gt;\r\n\t\t\t\t\t\t\t\t\t\t&lt;fo:table-body&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:for-each select=\"$input3/table/row\"&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:table-row&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:for-each select=\"./*\"&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:value-of select=\".\"/&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/xsl:for-each&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-row&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t&lt;/xsl:for-each&gt;\r\n\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-body&gt;\r\n\t\t\t\t\t\t\t\t\t&lt;/fo:table&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t&lt;xsl:text&gt;\r\n\t\t\t\t\t\t\t\t&lt;fo:inline text-decoration=\"underline\"&gt;\r\n\t\t\t\t\t\t\t\tTotal\r\n\t\t\t\t\t\t\t\t&lt;/fo:inline&gt;\r\n\t\t\t\t\t\t\t&lt;/xsl:text&gt;\t\t\t\r\n\t\t\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t&lt;fo:block padding-top=\"5mm\"/&gt;\r\n\r\n\t\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t&lt;/fo:flow&gt;\r\n\t\t\t&lt;/fo:page-sequence&gt;\r\n\t\t&lt;/fo:root&gt;\r\n\t&lt;/xsl:template&gt;\r\n&lt;/xsl:stylesheet&gt;"
+            },
+            "view": {
+                "id": "table"
+            }
+        },
+        {
+            "name": "Input2",
+            "source": {
+                "id": "file",
+                "location": "downloads",
+                "path": "Household-living-costs-price-indexes-June-2022-quarter-group-facts.csv",
+                "separator": ","
+            },
+            "view": {
+                "id": "table"
+            },
+            "ops": [
+                {
+                    "columns": [
+                        "prop_hhs",
+                        "year",
+                        "hlpi_name",
+                        "income",
+                        "expenditure",
+                        "eqv_income",
+                        "eqv_exp",
+                        "tot_hhs"
+                    ],
+                    "id": "order"
+                },
+                {
+                    "map": {
+                        "year": "=2020",
+                        "hlpi_name": "!(quin"
+                    },
+                    "id": "filter"
+                },
+                {
+                    "columns": [
+                        "hlpi",
+                        "own",
+                        "own_wm",
+                        "own_prop",
+                        "own_wm_prop",
+                        "prop_hhs",
+                        "age",
+                        "size"
+                    ],
+                    "id": "hide"
+                },
+                {
+                    "map": {
+                        "tot_hhs": "total",
+                        "hlpi_name": "title"
+                    },
+                    "id": "rename"
+                },
+                {
+                    "map": {
+                        "tot_hhs": "$#,##0.00"
+                    },
+                    "id": "format"
+                }
+            ]
+        },
+        {
+            "name": "Input3",
+            "source": {
+                "id": "pivot",
+                "ref": "Input2",
+                "rows": [
+                    "title"
+                ],
+                "data": [
+                    [
+                        "SUM",
+                        "total"
+                    ]
+                ]
+            },
+            "view": {
+                "id": "table"
+            },
+            "ops": [
+                {
+                    "map": {
+                        "Sum of total": "Total"
+                    },
+                    "id": "rename"
+                },
+                {
+                    "map": {
+                        "Sum of total": "$ #,##0.00"
+                    },
+                    "id": "format"
+                },
+                {
+                    "id": "add",
+                    "name": "blank",
+                    "value": []
+                },
+                {
+                    "id": "add",
+                    "name": "Right side data",
+                    "value": [
+                        "",
+                        "Amount in Words",
+                        "Three lakh nine thousand only"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Input4",
+            "source": {
+                "id": "pivot",
+                "ref": "Input2",
+                "data": [
+                    [
+                        "SUM",
+                        "income"
+                    ],
+                    [
+                        "SUM",
+                        "expenditure"
+                    ],
+                    [
+                        "SUM",
+                        "eqv_income"
+                    ],
+                    [
+                        "SUM",
+                        "eqv_exp"
+                    ],
+                    [
+                        "SUM",
+                        "total"
+                    ]
+                ]
+            },
+            "view": {
+                "id": "table"
+            },
+            "ops": [
+                {
+                    "id": "add",
+                    "name": "titlr",
+                    "value": []
+                },
+                {
+                    "id": "add",
+                    "name": "year",
+                    "value": []
+                },
+                {
+                    "columns": [
+                        "titlr",
+                        "year",
+                        "Sum of income",
+                        "Sum of expenditure",
+                        "Sum of eqv_income",
+                        "Sum of eqv_exp",
+                        "Sum of total"
+                    ],
+                    "id": "order"
+                },
+                {
+                    "map": {
+                        "Sum of total": "$#,##0.00"
+                    },
+                    "id": "format"
+                }
+            ]
+        }
+    ],
+    "outputs": [],
+    "archives": []
+}</config>
+    </org.ibboost.orqa.jenkins.datatransform.DataBuilder>
+  </builders>
+  <publishers/>
+  <buildWrappers>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.17"/>
+  </buildWrappers>
+</project>
