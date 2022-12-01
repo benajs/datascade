@@ -28,11 +28,11 @@
       <config>{
     "sheets": [
         {
-            "name": "Sheet1",
+            "name": "All Tickets",
             "source": {
                 "id": "http",
                 "url": "https://jbrains.atlassian.net/rest/api/latest/search?expand=names,renderedFields",
-                "auth": "jira-user-token"
+                "auth": "jira"
             },
             "view": {
                 "id": "table"
@@ -42,37 +42,11 @@
                     "id": "convert",
                     "columns": [
                         "issues/key",
-                        "issues/renderedFields/created",
-                        "issues/fields/parent/fields/status/name",
-                        "issues/fields/project/name",
-                        "issues/fields/parent/fields/summary",
-                        "issues/fields/summary",
                         "issues/fields/issuetype/name",
                         "issues/fields/status/name",
-                        "issues/fields/status/statusCategory/name"
+                        "issues/fields/summary",
+                        "issues/renderedFields/created"
                     ]
-                }
-            ]
-        },
-        {
-            "name": "Sheet2",
-            "source": {
-                "id": "sheet",
-                "ref": "Sheet1"
-            },
-            "view": {
-                "id": "html"
-            },
-            "ops": [
-                {
-                    "columns": [
-                        "renderedFields created",
-                        "status name",
-                        "project name",
-                        "fields summary",
-                        "statusCategory name"
-                    ],
-                    "id": "hide"
                 }
             ]
         }
