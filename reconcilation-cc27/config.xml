@@ -1,7 +1,6 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.0" encoding="UTF-8"?><project>
   <actions/>
-  <description></description>
+  <description/>
   <displayName>Reconcilation</displayName>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -27,128 +26,130 @@
   <builders>
     <com.datascade.DataBuilder plugin="datascade-jenkins-plugin@1.0-SNAPSHOT">
       <config>{
-    &quot;sheets&quot;: [
+    "sheets": [
         {
-            &quot;name&quot;: &quot;base&quot;,
-            &quot;source&quot;: {
-                &quot;id&quot;: &quot;file&quot;,
-                &quot;location&quot;: &quot;data&quot;,
-                &quot;path&quot;: &quot;IBBoost/base.csv&quot;,
-                &quot;wildcards&quot;: &quot;NEWEST&quot;,
-                &quot;separator&quot;: &quot;,&quot;,
-                &quot;typeDetect&quot;: false
+            "name": "base",
+            "source": {
+                "id": "file",
+                "location": "data",
+                "path": "IBBoost/base.csv",
+                "wildcards": "NEWEST",
+                "separator": ",",
+                "typeDetect": false
             },
-            &quot;view&quot;: {
-                &quot;id&quot;: &quot;table&quot;
+            "view": {
+                "id": "table"
             },
-            &quot;ops&quot;: [
+            "ops": [
                 {
-                    &quot;columns&quot;: [
-                        &quot;+Card Number&quot;
+                    "columns": [
+                        "+Card Number"
                     ],
-                    &quot;id&quot;: &quot;sort&quot;
+                    "id": "sort"
                 }
             ]
         },
         {
-            &quot;name&quot;: &quot;target&quot;,
-            &quot;source&quot;: {
-                &quot;id&quot;: &quot;file&quot;,
-                &quot;location&quot;: &quot;data&quot;,
-                &quot;path&quot;: &quot;IBBoost/target.csv&quot;,
-                &quot;wildcards&quot;: &quot;NEWEST&quot;,
-                &quot;separator&quot;: &quot;,&quot;,
-                &quot;typeDetect&quot;: false
+            "name": "target",
+            "source": {
+                "id": "file",
+                "location": "data",
+                "path": "IBBoost/target.csv",
+                "wildcards": "NEWEST",
+                "separator": ",",
+                "typeDetect": false
             },
-            &quot;view&quot;: {
-                &quot;id&quot;: &quot;table&quot;
+            "view": {
+                "id": "table"
             },
-            &quot;ops&quot;: [
+            "ops": [
                 {
-                    &quot;columns&quot;: [
-                        &quot;+Card Number&quot;
+                    "columns": [
+                        "+Card Number"
                     ],
-                    &quot;id&quot;: &quot;sort&quot;
+                    "id": "sort"
                 }
             ]
         },
         {
-            &quot;name&quot;: &quot;Reconcilation&quot;,
-            &quot;source&quot;: {
-                &quot;id&quot;: &quot;compare&quot;,
-                &quot;left&quot;: &quot;base&quot;,
-                &quot;right&quot;: &quot;target&quot;,
-                &quot;maxMismatches&quot;: 3,
-                &quot;sorted&quot;: true,
-                &quot;keys&quot;: [
-                    &quot;Card Number&quot;
-                ]
+            "name": "Reconcilation",
+            "source": {
+                "id": "compare",
+                "left": "base",
+                "right": "target",
+                "maxMismatches": 16,
+                "sorted": true,
+                "keys": [
+                    "Card Number",
+                    "Card Type Full Name"
+                ],
+                "tolerances": {}
             },
-            &quot;view&quot;: {
-                &quot;id&quot;: &quot;table&quot;
+            "view": {
+                "id": "table"
             },
-            &quot;ops&quot;: [
+            "ops": [
                 {
-                    &quot;id&quot;: &quot;notes&quot;,
-                    &quot;columns&quot;: [
-                        &quot;Card Number&quot;
+                    "id": "notes",
+                    "columns": [
+                        "Card Number"
                     ]
                 }
             ]
         },
         {
-            &quot;name&quot;: &quot;Summary&quot;,
-            &quot;source&quot;: {
-                &quot;id&quot;: &quot;compare-summary&quot;,
-                &quot;ref&quot;: &quot;Reconcilation&quot;
+            "name": "Summary",
+            "source": {
+                "id": "compare-summary",
+                "ref": "Reconcilation"
             },
-            &quot;view&quot;: {
-                &quot;id&quot;: &quot;table&quot;
+            "view": {
+                "id": "table"
             },
-            &quot;ops&quot;: [
+            "ops": [
                 {
-                    &quot;id&quot;: &quot;add&quot;,
-                    &quot;name&quot;: &quot;TYPE&quot;,
-                    &quot;value&quot;: &quot;= IF(OR(ISTEXT(&apos;MISMATCH COLUMN&apos;), ISTEXT(NOTES)), \&quot;\&quot;, RESULT)&quot;
+                    "id": "add",
+                    "name": "TYPE",
+                    "value": "= IF(OR(ISTEXT('MISMATCH COLUMN'), ISTEXT(NOTES)), \"\", RESULT)"
                 },
                 {
-                    &quot;id&quot;: &quot;add&quot;,
-                    &quot;name&quot;: &quot;COLUMN&quot;,
-                    &quot;value&quot;: &quot;= IF(ISTEXT(NOTES), \&quot;\&quot;, &apos;MISMATCH COLUMN&apos;)&quot;
+                    "id": "add",
+                    "name": "COLUMN",
+                    "value": "= IF(ISTEXT(NOTES), \"\", 'MISMATCH COLUMN')"
                 },
                 {
-                    &quot;id&quot;: &quot;add&quot;,
-                    &quot;name&quot;: &quot;TOTAL&quot;,
-                    &quot;value&quot;: &quot;= IF(ISTEXT(NOTES), \&quot;\&quot;, COUNT)&quot;
+                    "id": "add",
+                    "name": "TOTAL",
+                    "value": "= IF(ISTEXT(NOTES), \"\", COUNT)"
                 },
                 {
-                    &quot;id&quot;: &quot;add&quot;,
-                    &quot;name&quot;: &quot;TOTAL NOTES&quot;,
-                    &quot;value&quot;: &quot;= IF(ISTEXT(NOTES), COUNT, \&quot;\&quot;)&quot;
+                    "id": "add",
+                    "name": "TOTAL NOTES",
+                    "value": "= IF(ISTEXT(NOTES), COUNT, \"\")"
                 },
                 {
-                    &quot;id&quot;: &quot;order&quot;,
-                    &quot;columns&quot;: [
-                        &quot;TYPE&quot;,
-                        &quot;COLUMN&quot;,
-                        &quot;TOTAL&quot;,
-                        &quot;NOTES&quot;,
-                        &quot;TOTAL NOTES&quot;
+                    "id": "order",
+                    "columns": [
+                        "TYPE",
+                        "COLUMN",
+                        "TOTAL",
+                        "NOTES",
+                        "TOTAL NOTES"
                     ]
                 },
                 {
-                    &quot;id&quot;: &quot;hide&quot;,
-                    &quot;columns&quot;: [
-                        &quot;RESULT&quot;,
-                        &quot;MISMATCH COLUMN&quot;,
-                        &quot;COUNT&quot;
+                    "id": "hide",
+                    "columns": [
+                        "RESULT",
+                        "MISMATCH COLUMN",
+                        "COUNT"
                     ]
                 }
             ]
         }
     ],
-    &quot;outputs&quot;: [],
-    &quot;archives&quot;: []
+    "outputs": [],
+    "archives": []
 }</config>
     </com.datascade.DataBuilder>
   </builders>
