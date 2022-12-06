@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><project>
   <actions/>
   <description/>
-  <displayName>jira</displayName>
+  <displayName>Demo_http</displayName>
   <keepDependencies>false</keepDependencies>
   <properties>
     <jenkins.model.BuildDiscarderProperty>
@@ -47,6 +47,41 @@
                         "issues/fields/summary",
                         "issues/renderedFields/created"
                     ]
+                }
+            ]
+        },
+        {
+            "name": "Sheet2",
+            "source": {
+                "id": "sheet",
+                "ref": "All Tickets"
+            },
+            "view": {
+                "id": "form",
+                "parameter": "Files/csvFile",
+                "fields": [],
+                "selectable": true,
+                "editable": [
+                    1
+                ]
+            },
+            "ops": [
+                {
+                    "columns": [
+                        "issues key",
+                        "renderedFields created"
+                    ],
+                    "id": "hide"
+                },
+                {
+                    "columns": [
+                        "issues key",
+                        "fields summary",
+                        "status name",
+                        "issuetype name",
+                        "renderedFields created"
+                    ],
+                    "id": "order"
                 }
             ]
         }
