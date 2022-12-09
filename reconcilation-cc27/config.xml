@@ -46,6 +46,17 @@
                         "+Card Number"
                     ],
                     "id": "sort"
+                },
+                {
+                    "map": {
+                        "Credit Limit": "0.00"
+                    },
+                    "id": "format"
+                },
+                {
+                    "id": "add",
+                    "name": "newCredit",
+                    "value": "=VALUE('Credit Limit')"
                 }
             ]
         },
@@ -68,6 +79,17 @@
                         "+Card Number"
                     ],
                     "id": "sort"
+                },
+                {
+                    "map": {
+                        "Credit Limit": "0.00"
+                    },
+                    "id": "format"
+                },
+                {
+                    "id": "add",
+                    "name": "newCredit",
+                    "value": "=VALUE('Credit Limit')"
                 }
             ]
         },
@@ -83,7 +105,9 @@
                     "Card Number",
                     "Card Type Full Name"
                 ],
-                "tolerances": {}
+                "tolerances": {
+                    "newCredit": "1000"
+                }
             },
             "view": {
                 "id": "table"
