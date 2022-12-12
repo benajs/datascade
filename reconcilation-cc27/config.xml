@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><project>
   <actions/>
   <description/>
-  <displayName>Reconcilation</displayName>
+  <displayName>Demo_Reconcilation</displayName>
   <keepDependencies>false</keepDependencies>
   <properties>
     <jenkins.model.BuildDiscarderProperty>
@@ -21,7 +21,7 @@
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers/>
+  <triggers><hudson.triggers.TimerTrigger><spec>0/10 10-20 * * 1-5</spec></hudson.triggers.TimerTrigger></triggers>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <com.datascade.DataBuilder plugin="datascade-jenkins-plugin@1.0-SNAPSHOT">

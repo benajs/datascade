@@ -44,7 +44,25 @@
                 "size": "4"
             },
             "view": {
-                "id": "table"
+                "id": "form",
+                "parameter": "Files/csvFile",
+                "fields": [
+                    {
+                        "action": "save",
+                        "label": "Save",
+                        "type": "button"
+                    },
+                    {
+                        "action": "run",
+                        "label": "Run",
+                        "job": "groovyread",
+                        "insitu": false,
+                        "type": "button"
+                    }
+                ],
+                "editable": true,
+                "auditRef": "Sheet3",
+                "auditKey": "N"
             },
             "ops": [
                 {
@@ -68,6 +86,15 @@
                     ]
                 }
             ]
+        },
+        {
+            "name": "Sheet3",
+            "source": {
+                "id": "audit"
+            },
+            "view": {
+                "id": "table"
+            }
         }
     ],
     "outputs": [],

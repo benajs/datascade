@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><project>
+  <actions/>
+  <description/>
+  <displayName>Demo_group</displayName>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>10</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <com.datascade.auth.JobAuthProperty plugin="datascade-jenkins-plugin@1.0-SNAPSHOT">
+      <ownerId>admin</ownerId>
+    </com.datascade.auth.JobAuthProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers><jenkins.triggers.ReverseBuildTrigger><threshold><name>SUCCESS</name><ordinal>0</ordinal><color>BLUE</color><completeBuild>true</completeBuild></threshold><spec/><upstreamProjects>jira</upstreamProjects></jenkins.triggers.ReverseBuildTrigger></triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <com.datascade.DataBuilder plugin="datascade-jenkins-plugin@1.0-SNAPSHOT">
+      <config>{
+    "sheets": [
+        {
+            "name": "Sheet1",
+            "source": {
+                "id": "file",
+                "location": "Demo",
+                "path": "news/news_*.csv",
+                "wildcards": "ALL",
+                "separator": ","
+            },
+            "view": {
+                "id": "table"
+            }
+        },
+        {
+            "name": "Sheet2",
+            "source": {
+                "id": "file",
+                "location": "Demo",
+                "path": "news/news_*.csv",
+                "wildcards": "NEWEST",
+                "separator": ","
+            },
+            "view": {
+                "id": "table"
+            }
+        }
+    ],
+    "outputs": [],
+    "archives": []
+}</config>
+    </com.datascade.DataBuilder>
+  </builders>
+  <publishers/>
+  <buildWrappers>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.21"/>
+  </buildWrappers>
+</project>

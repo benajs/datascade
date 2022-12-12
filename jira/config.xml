@@ -21,7 +21,7 @@
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers/>
+  <triggers><hudson.triggers.TimerTrigger><spec>15 10 * * *</spec></hudson.triggers.TimerTrigger></triggers>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <com.datascade.DataBuilder plugin="datascade-jenkins-plugin@1.0-SNAPSHOT">
@@ -31,7 +31,7 @@
             "name": "rss",
             "source": {
                 "id": "http",
-                "url": "https://news.un.org/feed/subscribe/en/news/all/rss.xml"
+                "url": "https://feeds.feedburner.com/TechnologyOrg"
             },
             "view": {
                 "id": "table"
@@ -42,62 +42,78 @@
                     "columns": [
                         "rss/channel/item/title",
                         "rss/channel/item/description",
-                        "rss/channel/item/link",
-                        "rss/channel/item/pubDate"
+                        "rss/channel/item/pubDate",
+                        "rss/channel/item/dc:creator"
                     ]
                 }
             ]
         },
         {
-            "name": "news",
+            "name": "rss2",
             "source": {
-                "id": "sheet",
-                "ref": "rss"
+                "id": "http",
+                "url": "https://www.zdnet.com/videos/rss.xml"
             },
             "view": {
-                "id": "table",
-                "grouped": true
+                "id": "table"
             },
             "ops": [
                 {
-                    "map": {
-                        "item title": "Title",
-                        "item description": "Description",
-                        "item link": "Link"
-                    },
-                    "id": "rename"
-                },
+                    "id": "convert",
+                    "columns": [
+                        "rss/channel/item/title",
+                        "rss/channel/item/description",
+                        "rss/channel/item/pubDate",
+                        "rss/channel/item/media:credit/@role",
+                        "rss/channel/item/media:credit"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Concatenation",
+            "source": {
+                "id": "combine",
+                "refs": [
+                    "rss",
+                    "rss2"
+                ]
+            },
+            "view": {
+                "id": "table"
+            },
+            "ops": [
                 {
                     "id": "add",
-                    "name": "pubdate",
+                    "name": "Published Date",
                     "value": "=(MID('item pubDate',6,12))"
                 },
                 {
                     "id": "add",
-                    "name": "Published Date",
-                    "value": "=VALUE('pubDate')"
+                    "name": "Author",
+                    "value": "=IF(ISBLANK('item credit'),'item creator','item credit')"
                 },
                 {
                     "columns": [
-                        "item pubDate"
+                        "item creator",
+                        "item credit"
                     ],
                     "id": "hide"
-                },
-                {
-                    "columns": [
-                        "pubdate",
-                        "item title",
-                        "item description",
-                        "item link",
-                        "item pubDate",
-                        "Published Date"
-                    ],
-                    "id": "order"
                 }
+            ],
+            "filename": "= CONCAT(\"news_\", TEXT(TODAY(), \"yyyyMMdd\"), \".csv\")"
+        }
+    ],
+    "outputs": [
+        {
+            "id": "file",
+            "location": "Demo",
+            "path": "news",
+            "refs": [
+                "Concatenation"
             ]
         }
     ],
-    "outputs": [],
     "archives": []
 }</config>
     </com.datascade.DataBuilder>
