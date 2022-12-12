@@ -1,0 +1,251 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>XSLT Transformation</description>
+  <displayName>Demo_Pdf_xslt</displayName>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>10</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <com.datascade.auth.JobAuthProperty plugin="datascade-jenkins-plugin@1.0-SNAPSHOT">
+      <ownerId>admin</ownerId>
+    </com.datascade.auth.JobAuthProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <com.datascade.DataBuilder plugin="datascade-jenkins-plugin@1.0-SNAPSHOT">
+      <config>{
+    &quot;sheets&quot;: [
+        {
+            &quot;name&quot;: &quot;logo&quot;,
+            &quot;source&quot;: {
+                &quot;id&quot;: &quot;file&quot;,
+                &quot;location&quot;: &quot;Demo&quot;,
+                &quot;path&quot;: &quot;pdf/logo.jpg&quot;,
+                &quot;wildcards&quot;: &quot;NEWEST&quot;
+            },
+            &quot;view&quot;: {
+                &quot;id&quot;: &quot;table&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Input1&quot;,
+            &quot;source&quot;: {
+                &quot;id&quot;: &quot;text&quot;,
+                &quot;content&quot;: &quot;Date,Invoive Number,Prepared By\n1/09/2022, 100001,Ben\n&quot;
+            },
+            &quot;view&quot;: {
+                &quot;id&quot;: &quot;table&quot;
+            },
+            &quot;ops&quot;: [
+                {
+                    &quot;id&quot;: &quot;convert&quot;,
+                    &quot;type&quot;: &quot;csv&quot;,
+                    &quot;columns&quot;: []
+                }
+            ]
+        },
+        {
+            &quot;name&quot;: &quot;Input2&quot;,
+            &quot;source&quot;: {
+                &quot;id&quot;: &quot;file&quot;,
+                &quot;location&quot;: &quot;Demo&quot;,
+                &quot;path&quot;: &quot;pdf/Household-living-costs.csv&quot;,
+                &quot;wildcards&quot;: &quot;NEWEST&quot;,
+                &quot;separator&quot;: &quot;,&quot;
+            },
+            &quot;view&quot;: {
+                &quot;id&quot;: &quot;table&quot;
+            },
+            &quot;ops&quot;: [
+                {
+                    &quot;columns&quot;: [
+                        &quot;prop_hhs&quot;,
+                        &quot;year&quot;,
+                        &quot;hlpi_name&quot;,
+                        &quot;income&quot;,
+                        &quot;expenditure&quot;,
+                        &quot;eqv_income&quot;,
+                        &quot;eqv_exp&quot;,
+                        &quot;tot_hhs&quot;
+                    ],
+                    &quot;id&quot;: &quot;order&quot;
+                },
+                {
+                    &quot;map&quot;: {
+                        &quot;year&quot;: &quot;=2020&quot;,
+                        &quot;hlpi_name&quot;: &quot;!(quin&quot;
+                    },
+                    &quot;id&quot;: &quot;filter&quot;
+                },
+                {
+                    &quot;columns&quot;: [
+                        &quot;hlpi&quot;,
+                        &quot;own&quot;,
+                        &quot;own_wm&quot;,
+                        &quot;own_prop&quot;,
+                        &quot;own_wm_prop&quot;,
+                        &quot;prop_hhs&quot;,
+                        &quot;age&quot;,
+                        &quot;size&quot;
+                    ],
+                    &quot;id&quot;: &quot;hide&quot;
+                },
+                {
+                    &quot;map&quot;: {
+                        &quot;tot_hhs&quot;: &quot;total&quot;,
+                        &quot;hlpi_name&quot;: &quot;title&quot;
+                    },
+                    &quot;id&quot;: &quot;rename&quot;
+                },
+                {
+                    &quot;map&quot;: {
+                        &quot;tot_hhs&quot;: &quot;$#,##0.00&quot;
+                    },
+                    &quot;id&quot;: &quot;format&quot;
+                }
+            ]
+        },
+        {
+            &quot;name&quot;: &quot;Input3&quot;,
+            &quot;source&quot;: {
+                &quot;id&quot;: &quot;pivot&quot;,
+                &quot;ref&quot;: &quot;Input2&quot;,
+                &quot;rows&quot;: [
+                    &quot;title&quot;
+                ],
+                &quot;data&quot;: [
+                    [
+                        &quot;SUM&quot;,
+                        &quot;total&quot;
+                    ]
+                ]
+            },
+            &quot;view&quot;: {
+                &quot;id&quot;: &quot;table&quot;
+            },
+            &quot;ops&quot;: [
+                {
+                    &quot;map&quot;: {
+                        &quot;Sum of total&quot;: &quot;Total&quot;
+                    },
+                    &quot;id&quot;: &quot;rename&quot;
+                },
+                {
+                    &quot;map&quot;: {
+                        &quot;Sum of total&quot;: &quot;$ #,##0.00&quot;
+                    },
+                    &quot;id&quot;: &quot;format&quot;
+                },
+                {
+                    &quot;id&quot;: &quot;add&quot;,
+                    &quot;name&quot;: &quot;blank&quot;,
+                    &quot;value&quot;: []
+                },
+                {
+                    &quot;id&quot;: &quot;add&quot;,
+                    &quot;name&quot;: &quot;Right side data&quot;,
+                    &quot;value&quot;: [
+                        &quot;&quot;,
+                        &quot;Amount in Words&quot;,
+                        &quot;Three lakh nine thousand only&quot;
+                    ]
+                }
+            ]
+        },
+        {
+            &quot;name&quot;: &quot;Input4&quot;,
+            &quot;source&quot;: {
+                &quot;id&quot;: &quot;pivot&quot;,
+                &quot;ref&quot;: &quot;Input2&quot;,
+                &quot;data&quot;: [
+                    [
+                        &quot;SUM&quot;,
+                        &quot;income&quot;
+                    ],
+                    [
+                        &quot;SUM&quot;,
+                        &quot;expenditure&quot;
+                    ],
+                    [
+                        &quot;SUM&quot;,
+                        &quot;eqv_income&quot;
+                    ],
+                    [
+                        &quot;SUM&quot;,
+                        &quot;eqv_exp&quot;
+                    ],
+                    [
+                        &quot;SUM&quot;,
+                        &quot;total&quot;
+                    ]
+                ]
+            },
+            &quot;view&quot;: {
+                &quot;id&quot;: &quot;table&quot;
+            },
+            &quot;ops&quot;: [
+                {
+                    &quot;id&quot;: &quot;add&quot;,
+                    &quot;name&quot;: &quot;titlr&quot;,
+                    &quot;value&quot;: []
+                },
+                {
+                    &quot;id&quot;: &quot;add&quot;,
+                    &quot;name&quot;: &quot;year&quot;,
+                    &quot;value&quot;: []
+                },
+                {
+                    &quot;columns&quot;: [
+                        &quot;titlr&quot;,
+                        &quot;year&quot;,
+                        &quot;Sum of income&quot;,
+                        &quot;Sum of expenditure&quot;,
+                        &quot;Sum of eqv_income&quot;,
+                        &quot;Sum of eqv_exp&quot;,
+                        &quot;Sum of total&quot;
+                    ],
+                    &quot;id&quot;: &quot;order&quot;
+                },
+                {
+                    &quot;map&quot;: {
+                        &quot;Sum of total&quot;: &quot;$#,##0.00&quot;
+                    },
+                    &quot;id&quot;: &quot;format&quot;
+                }
+            ]
+        },
+        {
+            &quot;name&quot;: &quot;pdf&quot;,
+            &quot;source&quot;: {
+                &quot;id&quot;: &quot;xslt&quot;,
+                &quot;ref&quot;: &quot;Input1&quot;,
+                &quot;xslt&quot;: &quot;&lt;xsl:stylesheet version=\&quot;1.0\&quot; xmlns:xsl=\&quot;http://www.w3.org/1999/XSL/Transform\&quot;&gt;\r\n\t&lt;xsl:param name=\&quot;Name\&quot;/&gt;\r\n\t&lt;xsl:param name=\&quot;input3\&quot; select=\&quot;document(&apos;Input3&apos;)\&quot;/&gt;\r\n\t&lt;xsl:param name=\&quot;input1\&quot; select=\&quot;document(&apos;Input1&apos;)\&quot;/&gt;\r\n\t&lt;xsl:param name=\&quot;input2\&quot; select=\&quot;document(&apos;Input2&apos;)\&quot;/&gt;\r\n\t&lt;xsl:param name=\&quot;input4\&quot; select=\&quot;document(&apos;Input4&apos;)\&quot;/&gt;\r\n\t&lt;xsl:output method=\&quot;fo:pdf\&quot;/&gt;\r\n\t&lt;xsl:template match=\&quot;/\&quot;&gt;\r\n\t\t&lt;fo:root xmlns:fo=\&quot;http://www.w3.org/1999/XSL/Format\&quot;&gt;\r\n\t\t\t&lt;fo:layout-master-set&gt;\r\n\t\t\t\t&lt;fo:simple-page-master master-name=\&quot;my_page\&quot; margin=\&quot;0.5in\&quot;&gt;\r\n\t\t\t\t\t&lt;fo:region-body/&gt;\r\n\t\t\t\t&lt;/fo:simple-page-master&gt;\r\n\t\t\t&lt;/fo:layout-master-set&gt;\r\n\t\t\t&lt;fo:page-sequence master-reference=\&quot;my_page\&quot;&gt;\r\n\t\t\t\t&lt;fo:flow flow-name=\&quot;xsl-region-body\&quot;&gt;\r\n\t\t\t\t\t&lt;fo:block border-style=\&quot;solid\&quot; border-width=\&quot;1mm\&quot; text-align=\&quot;center\&quot; font-size=\&quot;10pt\&quot; margin=\&quot;1mm\&quot;&gt;\r\n\t\t\t\t\t\t&lt;xsl:value-of select=\&quot;concat(&apos; &apos;, $Name)\&quot;/&gt;\r\n\t\t\t\t\t\t&lt;fo:block text-align=\&quot;center\&quot;&gt;\r\n\t\t\t\t\t\t\t&lt;fo:external-graphic src=\&quot;Logo\&quot;/&gt;\r\n\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t&lt;xsl:text&gt;311 S. Wacker Drive, Suite 980,&lt;/xsl:text&gt;\r\n\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t&lt;xsl:text&gt;Chicago IL 60606&lt;/xsl:text&gt;\r\n\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t&lt;fo:block padding-top=\&quot;5mm\&quot;/&gt;\r\n\t\t\t\t\t\t&lt;fo:block text-align=\&quot;left\&quot; margin-bottom=\&quot;1in\&quot;&gt;\r\n\t\t\t\t\t\t\t&lt;xsl:text&gt;\r\n\t\t\t\t\t\t\t\t&lt;fo:inline text-decoration=\&quot;underline\&quot;&gt;\r\n\t\t\t\t\t\t\t     \tInput 1\r\n\t\t\t\t\t\t\t\t&lt;/fo:inline&gt;\r\n\t\t\t\t\t\t\t&lt;/xsl:text&gt;\r\n\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t&lt;fo:block padding-top=\&quot;5mm\&quot;/&gt;\r\n\t\t\t\t\t\t\t\t\t&lt;fo:table table-layout=\&quot;fixed\&quot; width=\&quot;50%\&quot;&gt;\r\n\t\t\t\t\t\t\t\t\t\t&lt;fo:table-body&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:for-each select=\&quot;$input1/table/row\&quot;&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:for-each select=\&quot;./*\&quot;&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:table-row&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:value-of select=\&quot;name()\&quot;/&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:value-of select=\&quot;.\&quot;/&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-row&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t&lt;/xsl:for-each&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t&lt;/xsl:for-each&gt;\r\n\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-body&gt;\r\n\t\t\t\t\t\t\t\t\t&lt;/fo:table&gt;\r\n\t\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t\t&lt;fo:block padding-top=\&quot;5mm\&quot;/&gt;\r\n\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t&lt;xsl:text&gt;\r\n\t\t\t\t\t\t\t\t&lt;fo:inline text-decoration=\&quot;underline\&quot;&gt;\r\n\t\t\t\t\t\t\t\tInput 1\r\n\t\t\t\t\t\t\t\t&lt;/fo:inline&gt;\r\n\t\t\t\t\t\t\t&lt;/xsl:text&gt;\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:block padding-top=\&quot;5mm\&quot;/&gt;\r\n\r\n\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t&lt;fo:table inline-progression-dimension=\&quot;auto\&quot; table-layout=\&quot;auto\&quot; width=\&quot;100%\&quot; hyphenate=\&quot;true\&quot;&gt;\r\n\t\t\t\t\t\t\t\t\t\t&lt;fo:table-body&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t&lt;fo:table-row text-align=\&quot;left\&quot; font-weight=\&quot;bold\&quot;&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:for-each select=\&quot;$input2/table/row[1]/*\&quot;&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:value-of select=\&quot;local-name()\&quot;/&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t&lt;/xsl:for-each&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-row&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t&lt;fo:table-row&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:block padding-top=\&quot;5mm\&quot;/&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-row&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:for-each select=\&quot;$input2/table/row\&quot;&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:table-row&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:for-each select=\&quot;./*\&quot;&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:value-of select=\&quot;.\&quot;/&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/xsl:for-each&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-row&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t&lt;/xsl:for-each&gt;\r\n\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-body&gt;\r\n\t\t\t\t\t\t\t\t\t&lt;/fo:table&gt;\r\n\t\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:block padding-top=\&quot;10mm\&quot;/&gt;\r\n\r\n\t\t\t\t\t\t\t&lt;fo:block border-style=\&quot;solid\&quot; border-width=\&quot;0.4mm\&quot;/&gt;\r\n\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t&lt;fo:table table-layout=\&quot;fixed\&quot; width=\&quot;100%\&quot; hyphenate=\&quot;true\&quot;&gt;\r\n\t\t\t\t\t\t\t\t\t\t&lt;fo:table-body&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:for-each select=\&quot;$input4/table/row\&quot;&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:table-row&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:for-each select=\&quot;./*\&quot;&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:value-of select=\&quot;.\&quot;/&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/xsl:for-each&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-row&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t&lt;/xsl:for-each&gt;\r\n\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-body&gt;\r\n\t\t\t\t\t\t\t\t\t&lt;/fo:table&gt;\r\n\t\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t\t\t&lt;fo:block padding-top=\&quot;5mm\&quot;/&gt;\r\n\t\t\t\t\t\t\t\t&lt;xsl:text&gt;Input3&lt;/xsl:text&gt;\r\n\t\t\t\t\t\t\t\t&lt;fo:block padding-top=\&quot;5mm\&quot;/&gt;\r\n\t\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t&lt;fo:table width=\&quot;5in\&quot;&gt;\r\n\t\t\t\t\t\t\t\t\t\t&lt;fo:table-body&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:for-each select=\&quot;$input3/table/row\&quot;&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:table-row&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:for-each select=\&quot;./*\&quot;&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;xsl:value-of select=\&quot;.\&quot;/&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-cell&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;/xsl:for-each&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-row&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t&lt;/xsl:for-each&gt;\r\n\t\t\t\t\t\t\t\t\t\t&lt;/fo:table-body&gt;\r\n\t\t\t\t\t\t\t\t\t&lt;/fo:table&gt;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&lt;fo:block&gt;\r\n\t\t\t\t\t\t\t&lt;xsl:text&gt;\r\n\t\t\t\t\t\t\t\t&lt;fo:inline text-decoration=\&quot;underline\&quot;&gt;\r\n\t\t\t\t\t\t\t\tTotal\r\n\t\t\t\t\t\t\t\t&lt;/fo:inline&gt;\r\n\t\t\t\t\t\t\t&lt;/xsl:text&gt;\t\t\t\r\n\t\t\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t&lt;fo:block padding-top=\&quot;5mm\&quot;/&gt;\r\n\r\n\t\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t\t&lt;/fo:block&gt;\r\n\t\t\t\t&lt;/fo:flow&gt;\r\n\t\t\t&lt;/fo:page-sequence&gt;\r\n\t\t&lt;/fo:root&gt;\r\n\t&lt;/xsl:template&gt;\r\n&lt;/xsl:stylesheet&gt;&quot;
+            },
+            &quot;view&quot;: {
+                &quot;id&quot;: &quot;table&quot;
+            }
+        }
+    ],
+    &quot;outputs&quot;: [],
+    &quot;archives&quot;: []
+}</config>
+    </com.datascade.DataBuilder>
+  </builders>
+  <publishers/>
+  <buildWrappers>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.21"/>
+  </buildWrappers>
+</project>
