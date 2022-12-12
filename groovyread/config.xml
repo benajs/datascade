@@ -31,17 +31,7 @@
             "name": "Sheet1",
             "source": {
                 "id": "groovy",
-                "script": "@Sheet(\"Sheet2\")\r\n\r\ndef mySheet;\r\ndef results =[][]\r\n\r\nmySheet.each{ \r\ndef row =[]\r\nrow.add(it[\"country_code\"]+\"  _\"+it[\"code\"])\r\nrow.add(it[\"value\"])\r\nresults.add(row)\r\n}\r\n\r\nreturn results"
-            },
-            "view": {
-                "id": "table"
-            }
-        },
-        {
-            "name": "Sheet3",
-            "source": {
-                "id": "groovy",
-                "script": "@Sheet(\"Sheet2\")\r\n\r\ndef mySheet;\r\ndef results =[][]\r\n\r\nmySheet.each{ \r\ndef row =[]\r\nrow.add(it[\"country_code\"]+\"ben_\"+it[\"code\"])\r\nrow.add(it[\"value\"])\r\nrow.add(it[\"value\"])\r\nresults.add(row)\r\n}\r\n\r\nreturn results"
+                "script": "@Sheet(\"Sheet2\")\r\n\r\ndef mySheet;\r\ndef results =[][]\r\nresults.add([\"Full Name\",\"Last Name\"])\r\n\r\nmySheet.each{ \r\ndef row =[]\r\nrow.add(it[\"Name\"]+\" \"+it[\"Last Name\"])\r\nrow.add(it[\"Name\"])\r\nresults.add(row)\r\n}\r\n\r\nreturn results"
             },
             "view": {
                 "id": "table"
@@ -50,15 +40,34 @@
         {
             "name": "Sheet2",
             "source": {
-                "id": "file",
-                "location": "data",
-                "path": "trademin.csv",
-                "wildcards": "NEWEST",
-                "separator": ","
+                "id": "range",
+                "size": "4"
             },
             "view": {
                 "id": "table"
-            }
+            },
+            "ops": [
+                {
+                    "id": "add",
+                    "name": "Name",
+                    "value": [
+                        "Ben",
+                        "John",
+                        "Sam",
+                        "Ina"
+                    ]
+                },
+                {
+                    "id": "add",
+                    "name": "Last Name",
+                    "value": [
+                        "James",
+                        "Alam",
+                        "Adam",
+                        "Alam"
+                    ]
+                }
+            ]
         }
     ],
     "outputs": [],

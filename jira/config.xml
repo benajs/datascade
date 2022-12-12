@@ -28,11 +28,10 @@
       <config>{
     "sheets": [
         {
-            "name": "All Tickets",
+            "name": "rss",
             "source": {
                 "id": "http",
-                "url": "https://jbrains.atlassian.net/rest/api/latest/search?expand=names,renderedFields",
-                "auth": "jira"
+                "url": "https://news.un.org/feed/subscribe/en/news/all/rss.xml"
             },
             "view": {
                 "id": "table"
@@ -41,45 +40,57 @@
                 {
                     "id": "convert",
                     "columns": [
-                        "issues/key",
-                        "issues/fields/issuetype/name",
-                        "issues/fields/status/name",
-                        "issues/fields/summary",
-                        "issues/renderedFields/created"
+                        "rss/channel/item/title",
+                        "rss/channel/item/description",
+                        "rss/channel/item/link",
+                        "rss/channel/item/pubDate"
                     ]
                 }
             ]
         },
         {
-            "name": "Sheet2",
+            "name": "news",
             "source": {
                 "id": "sheet",
-                "ref": "All Tickets"
+                "ref": "rss"
             },
             "view": {
-                "id": "form",
-                "parameter": "Files/csvFile",
-                "fields": [],
-                "selectable": true,
-                "editable": [
-                    1
-                ]
+                "id": "table",
+                "grouped": true
             },
             "ops": [
                 {
+                    "map": {
+                        "item title": "Title",
+                        "item description": "Description",
+                        "item link": "Link"
+                    },
+                    "id": "rename"
+                },
+                {
+                    "id": "add",
+                    "name": "pubdate",
+                    "value": "=(MID('item pubDate',6,12))"
+                },
+                {
+                    "id": "add",
+                    "name": "Published Date",
+                    "value": "=VALUE('pubDate')"
+                },
+                {
                     "columns": [
-                        "issues key",
-                        "renderedFields created"
+                        "item pubDate"
                     ],
                     "id": "hide"
                 },
                 {
                     "columns": [
-                        "issues key",
-                        "fields summary",
-                        "status name",
-                        "issuetype name",
-                        "renderedFields created"
+                        "pubdate",
+                        "item title",
+                        "item description",
+                        "item link",
+                        "item pubDate",
+                        "Published Date"
                     ],
                     "id": "order"
                 }
