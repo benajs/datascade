@@ -31,11 +31,10 @@
             "name": "base",
             "source": {
                 "id": "file",
-                "location": "data",
-                "path": "IBBoost/base.csv",
+                "location": "Demo",
+                "path": "rec/base.csv",
                 "wildcards": "NEWEST",
-                "separator": ",",
-                "typeDetect": false
+                "separator": ","
             },
             "view": {
                 "id": "table"
@@ -64,11 +63,10 @@
             "name": "target",
             "source": {
                 "id": "file",
-                "location": "data",
-                "path": "IBBoost/target.csv",
+                "location": "Demo",
+                "path": "rec/target.csv",
                 "wildcards": "NEWEST",
-                "separator": ",",
-                "typeDetect": false
+                "separator": ","
             },
             "view": {
                 "id": "table"
@@ -168,6 +166,49 @@
                         "MISMATCH COLUMN",
                         "COUNT"
                     ]
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "source": {
+                "id": "notes",
+                "ref": "Reconcilation"
+            },
+            "view": {
+                "id": "table"
+            },
+            "ops": [
+                {
+                    "columns": [
+                        "RESULT",
+                        "Card Type Full Name",
+                        "Issuing Bank (B)",
+                        "Issuing Bank (T)",
+                        "Card Holder's Name (B)",
+                        "Card Holder's Name (T)",
+                        "CVV/CVV2 (B)",
+                        "CVV/CVV2 (T)",
+                        "Issue Date (B)",
+                        "Issue Date (T)",
+                        "Expiry Date (B)",
+                        "Expiry Date (T)",
+                        "Billing Date (B)",
+                        "Billing Date (T)",
+                        "Card PIN (B)",
+                        "Card PIN (T)",
+                        "Credit Limit (B)",
+                        "Credit Limit (T)",
+                        "newCredit (B)",
+                        "newCredit (T)"
+                    ],
+                    "id": "hide"
+                },
+                {
+                    "map": {
+                        "Card Number": "@"
+                    },
+                    "id": "format"
                 }
             ]
         }
