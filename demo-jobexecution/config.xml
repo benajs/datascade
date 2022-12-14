@@ -1,7 +1,6 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.0" encoding="UTF-8"?><project>
   <actions/>
-  <description></description>
+  <description/>
   <displayName>Demo_JobExecution</displayName>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -27,21 +26,21 @@
   <builders>
     <com.datascade.DataBuilder plugin="datascade-jenkins-plugin@1.0-SNAPSHOT">
       <config>{
-    &quot;sheets&quot;: [
+    "sheets": [
         {
-            &quot;name&quot;: &quot;Sheet1&quot;,
-            &quot;source&quot;: {
-                &quot;id&quot;: &quot;macro&quot;,
-                &quot;job&quot;: &quot;reconcilation-cc27&quot;,
-                &quot;file&quot;: &quot;Summary.csv&quot;
+            "name": "Sheet1",
+            "source": {
+                "id": "macro",
+                "job": "demo-pivot",
+                "file": "Form.owf.csv"
             },
-            &quot;view&quot;: {
-                &quot;id&quot;: &quot;table&quot;
+            "view": {
+                "id": "table"
             }
         }
     ],
-    &quot;outputs&quot;: [],
-    &quot;archives&quot;: []
+    "outputs": [],
+    "archives": []
 }</config>
     </com.datascade.DataBuilder>
   </builders>

@@ -6354,6 +6354,40 @@
                     "id": "filter"
                 }
             ]
+        },
+        {
+            "name": "Form",
+            "source": {
+                "id": "sheet",
+                "ref": "Players"
+            },
+            "view": {
+                "id": "form",
+                "parameter": "Files/csvFile",
+                "fields": [
+                    {
+                        "action": "save",
+                        "label": "Save",
+                        "type": "button"
+                    },
+                    {
+                        "action": "run",
+                        "label": "Run Child Job",
+                        "job": "demo-jobexecution",
+                        "insitu": false,
+                        "type": "button"
+                    }
+                ],
+                "editable": true
+            },
+            "ops": [
+                {
+                    "map": {
+                        "\"Team\"": "=\"BAL\""
+                    },
+                    "id": "filter"
+                }
+            ]
         }
     ],
     "outputs": [],
