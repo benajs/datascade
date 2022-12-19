@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?><project>
+  <actions/>
+  <description/>
+  <displayName>Demo_Form</displayName>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>10</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <com.datascade.auth.JobAuthProperty plugin="datascade-jenkins-plugin@1.0-SNAPSHOT">
+      <ownerId>admin</ownerId>
+    </com.datascade.auth.JobAuthProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <com.datascade.DataBuilder plugin="datascade-jenkins-plugin@1.0-SNAPSHOT">
+      <config>{
+    "sheets": [
+        {
+            "name": "xml",
+            "source": {
+                "id": "file",
+                "location": "Demo",
+                "path": "bsample.xml"
+            },
+            "view": {
+                "id": "table"
+            },
+            "ops": [
+                {
+                    "id": "convert",
+                    "columns": [
+                        "data/row/id",
+                        "data/row/title",
+                        "data/row/notes",
+                        "data/row/date",
+                        "data/row/dates"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "sheet",
+            "source": {
+                "id": "sheet",
+                "ref": "xml"
+            },
+            "view": {
+                "id": "table"
+            },
+            "ops": [
+                {
+                    "id": "add",
+                    "name": "date",
+                    "value": "=IF(ISBLANK('row date'),'row dates','row date')"
+                },
+                {
+                    "columns": [
+                        "row date",
+                        "row dates"
+                    ],
+                    "id": "hide"
+                },
+                {
+                    "map": {
+                        "row id": "id",
+                        "row title": "title",
+                        "row notes": "notes"
+                    },
+                    "id": "rename"
+                }
+            ]
+        },
+        {
+            "name": "form",
+            "source": {
+                "id": "sheet",
+                "ref": "sheet"
+            },
+            "view": {
+                "id": "form",
+                "parameter": "Files/csvFile",
+                "fields": [
+                    {
+                        "action": "save",
+                        "label": "Save",
+                        "type": "button"
+                    },
+                    {
+                        "action": "run",
+                        "label": "Run child job",
+                        "job": "demo-formchild",
+                        "insitu": false,
+                        "type": "button"
+                    }
+                ],
+                "selectable": false,
+                "editable": true,
+                "auditRef": "audit",
+                "auditKey": "id"
+            }
+        },
+        {
+            "name": "audit",
+            "source": {
+                "id": "audit"
+            },
+            "view": {
+                "id": "table"
+            }
+        }
+    ],
+    "outputs": [],
+    "archives": []
+}</config>
+    </com.datascade.DataBuilder>
+  </builders>
+  <publishers/>
+  <buildWrappers>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.21"/>
+  </buildWrappers>
+</project>
