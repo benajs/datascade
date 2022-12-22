@@ -57,6 +57,13 @@
                         "Card Number": "0"
                     },
                     "id": "format"
+                },
+                {
+                    "columns": [
+                        "CVV/CVV2",
+                        "Card PIN"
+                    ],
+                    "id": "hide"
                 }
             ]
         },
@@ -90,6 +97,13 @@
                         "Card Number": "0"
                     },
                     "id": "format"
+                },
+                {
+                    "columns": [
+                        "CVV/CVV2",
+                        "Card PIN"
+                    ],
+                    "id": "hide"
                 }
             ]
         },
