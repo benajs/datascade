@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><project>
+	<actions/>
+	<description/>
+	<displayName>Demo_Calc</displayName>
+	<keepDependencies>false</keepDependencies>
+	<properties>
+		<jenkins.model.BuildDiscarderProperty>
+			<strategy class="hudson.tasks.LogRotator">
+				<daysToKeep>-1</daysToKeep>
+				<numToKeep>10</numToKeep>
+				<artifactDaysToKeep>-1</artifactDaysToKeep>
+				<artifactNumToKeep>-1</artifactNumToKeep>
+			</strategy>
+		</jenkins.model.BuildDiscarderProperty>
+	</properties>
+	<scm class="hudson.scm.NullSCM"/>
+	<canRoam>true</canRoam>
+	<disabled>false</disabled>
+	<blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+	<blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+	<triggers/>
+	<concurrentBuild>false</concurrentBuild>
+	<builders><com.datascade.DataBuilder><config>{
+    "sheets": [
+        {
+            "name": "Sheet1",
+            "source": {
+                "id": "file",
+                "location": "downloads",
+                "path": "base.csv",
+                "wildcards": "NEWEST",
+                "separator": ","
+            },
+            "view": {
+                "id": "table"
+            },
+            "ops": [
+                {
+                    "map": {
+                        "Issue Date": "&lt;01/12/2008"
+                    },
+                    "id": "filter"
+                },
+                {
+                    "map": {
+                        "Card Number": "0",
+                        "Issue Date": "dddd, mmmm dd, yyyy"
+                    },
+                    "id": "format"
+                },
+                {
+                    "id": "add",
+                    "name": "valid days",
+                    "value": "=DAYS('Expiry Date' ,'Issue Date')"
+                },
+                {
+                    "columns": [
+                        "Card Type Full Name",
+                        "Issuing Bank",
+                        "Card Number",
+                        "Card Holder's Name",
+                        "CVV/CVV2",
+                        "Issue Date",
+                        "Expiry Date",
+                        "Billing Date",
+                        "Card PIN",
+                        "Credit Limit",
+                        "valid days"
+                    ],
+                    "id": "order"
+                },
+                {
+                    "id": "add",
+                    "name": "valid day",
+                    "value": "=CONCAT(DAY('valid days'),\" days \",MONTH('valid days'), \" months \",SUM(YEAR('valid days'),-1900),\" years\")"
+                },
+                {
+                    "columns": [
+                        "-valid days"
+                    ],
+                    "id": "sort"
+                }
+            ]
+        }
+    ],
+    "outputs": [],
+    "archives": []
+}</config></com.datascade.DataBuilder></builders>
+	<publishers/>
+	<buildWrappers>
+		<hudson.plugins.timestamper.TimestamperBuildWrapper/>
+	</buildWrappers>
+</project>

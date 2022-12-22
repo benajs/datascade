@@ -28,7 +28,7 @@
       <config>{
     "sheets": [
         {
-            "name": "Sheet1",
+            "name": "AllNews",
             "source": {
                 "id": "file",
                 "location": "Demo",
@@ -41,7 +41,7 @@
             }
         },
         {
-            "name": "Sheet2",
+            "name": "LatestNews",
             "source": {
                 "id": "file",
                 "location": "Demo",
