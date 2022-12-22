@@ -79,6 +79,12 @@
                         "-valid days"
                     ],
                     "id": "sort"
+                },
+                {
+                    "columns": [
+                        "Card PIN"
+                    ],
+                    "id": "hide"
                 }
             ]
         }
