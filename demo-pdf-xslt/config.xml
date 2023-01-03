@@ -227,7 +227,7 @@
             ]
         },
         {
-            "name": "pdf",
+            "name": "Invoice",
             "source": {
                 "id": "xslt",
                 "ref": "Input1",
@@ -235,15 +235,16 @@
             },
             "view": {
                 "id": "table"
-            }
+            },
+            "filename": "= CONCAT(\"demo_pdf_\", TEXT(TODAY(), \"yyyyMMdd\"), \".csv\")"
         }
     ],
     "outputs": [
         {
             "id": "file",
-            "location": "data",
+            "location": "Demo",
             "refs": [
-                "pdf"
+                "Invoice"
             ]
         }
     ],
