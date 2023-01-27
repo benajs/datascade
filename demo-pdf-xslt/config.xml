@@ -237,6 +237,34 @@
                 "id": "table"
             },
             "filename": "= CONCAT(\"demo_pdf_\", TEXT(TODAY(), \"yyyyMMdd\"), \".csv\")"
+        },
+        {
+            "name": "Content",
+            "source": {
+                "id": "text",
+                "content": "&lt;HTML&gt; \n&lt;BR&gt;\nHi,\n&lt;BR&gt;\n&lt;BR&gt;\nThank you for trusting us with your transactions. The document is provided below in the attachment.\n&lt;BR&gt;\n&lt;BR&gt;\nFor further assistance, kindly reach out to our customer support\n&lt;BR&gt;\n&lt;BR&gt;\n&lt;BR&gt;\nThanks\n&lt;BR&gt;\n&lt;B&gt;IBBoost\n&lt;img src=\"https://www.datascade.com/\"&gt;\n&lt;BR&gt;\n&lt;BR&gt;\n\n&lt;/HTML&gt;"
+            },
+            "view": {
+                "id": "table"
+            },
+            "ops": []
+        },
+        {
+            "name": "Message",
+            "source": {
+                "id": "sheet",
+                "ref": "Content"
+            },
+            "view": {
+                "id": "table"
+            },
+            "ops": [
+                {
+                    "id": "convert",
+                    "type": "htm",
+                    "columns": []
+                }
+            ]
         }
     ],
     "outputs": [
@@ -244,6 +272,16 @@
             "id": "file",
             "location": "Demo",
             "refs": [
+                "Invoice"
+            ]
+        },
+        {
+            "id": "email",
+            "server": "bensmtp",
+            "to": "benasir.jailabudeen@ibboost.com",
+            "subject": "Demo pdf export",
+            "body": "Message",
+            "attach": [
                 "Invoice"
             ]
         }

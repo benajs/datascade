@@ -32,6 +32,27 @@
             "view": {
                 "id": "table"
             }
+        },
+        {
+            "name": "Sheet2",
+            "source": {
+                "id": "compare",
+                "left": "Sheet1",
+                "right": "Sheet3"
+            },
+            "view": {
+                "id": "table"
+            }
+        },
+        {
+            "name": "Sheet3",
+            "source": {
+                "id": "sheet",
+                "ref": "Sheet1"
+            },
+            "view": {
+                "id": "table"
+            }
         }
     ],
     "outputs": [],

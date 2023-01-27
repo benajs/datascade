@@ -6388,6 +6388,18 @@
                     "id": "filter"
                 }
             ]
+        },
+        {
+            "name": "Sheet6",
+            "source": {
+                "id": "sheet",
+                "ref": "Chart"
+            },
+            "view": {
+                "id": "chart",
+                "style": "surface",
+                "color": "blue"
+            }
         }
     ],
     "outputs": [],
